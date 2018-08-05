@@ -6,16 +6,19 @@ new Vue ({
     total: 0,
     items: [],
     cart: [],
-    newSearch: '',
-    lastSearch: ''
+    newSearch: 'disco',
+    lastSearch: '',
+    loading: false
   },
   methods: {
     onSubmit: function() {
+      this.loading = true;
       this.$http
         .get('/search/'.concat(this.newSearch))
         .then(function(res) {
           this.lastSearch = this.newSearch;
           this.items = res.data;
+          this.loading = false;
         })
       ;
     },
@@ -60,5 +63,8 @@ new Vue ({
     currency: function(price) {
       return '$'.concat(price.toFixed(2));
     }
+  },
+  mounted: function() {
+    this.onSubmit();
   }
 });
